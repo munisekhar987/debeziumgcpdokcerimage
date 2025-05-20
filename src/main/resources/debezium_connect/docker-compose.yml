@@ -1,0 +1,28 @@
+services:
+  connect:
+    image: debezium-connect-gcp:latest
+    container_name: connect
+    ports:
+      - "8083:8083"
+    volumes:
+      - ./sa-key.json:/tmp/sa-key.json
+    environment:
+      BOOTSTRAP_SERVERS: bootstrap.transapp-rollback-poc.us-east4.managedkafka.pr-transapp-dev-use4-01.cloud.goog:9092
+      GROUP_ID: 1
+      CONFIG_STORAGE_TOPIC: connect_configs
+      OFFSET_STORAGE_TOPIC: connect_offsets
+      STATUS_STORAGE_TOPIC: connect_statuses
+      CONNECT_KEY_CONVERTER: io.confluent.connect.avro.AvroConverter
+      CONNECT_VALUE_CONVERTER: io.confluent.connect.avro.AvroConverter
+      CONNECT_KEY_CONVERTER_SCHEMA_REGISTRY_URL: http://schema-registry:8081
+      CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: http://schema-registry:8081
+      CONNECT_REST_ADVERTISED_HOST_NAME: connect
+      # Security
+      CONNECT_SECURITY_PROTOCOL: SASL_SSL
+      CONNECT_SASL_MECHANISM: OAUTHBEARER
+      CONNECT_SASL_JAAS_CONFIG: |
+        org.apache.kafka.common.security.oauthbearer.OAuthBearerLoginModule required
+        oauth.client.id="sa-poc-kafka-user@pr-transapp-dev-use4-01.iam.gserviceaccount.com"
+        oauth.client.secret="/secret/gcpkafkapoc/sa-key.json";
+      CONNECT_SASL_LOGIN_CALLBACK_HANDLER_CLASS: com.google.auth.oauthbearer.OAuthBearerLoginCallbackHandler
+      CONNECT_SSL_ENDPOINT_IDENTIFICATION_ALGORITHM: https
