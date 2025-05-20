@@ -1,6 +1,6 @@
 services:
   connect:
-    image: debezium-connect-gcp:latest   # Use your locally built image here
+    image: debezium-connect-gcp:latest
     container_name: connect
     ports:
       - "8083:8083"
