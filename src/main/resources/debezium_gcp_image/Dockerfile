@@ -1,4 +1,4 @@
-FROM debezium/connect:latest
+FROM quay.io/debezium/connect:latest
 
 # Create a libs directory if needed
 #RUN mkdir -p /kafka/libs

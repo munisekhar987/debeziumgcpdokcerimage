@@ -1,6 +1,6 @@
 services:
   connect:
-    image: quay.io/debezium/connect:latest
+    image: debezium-connect-gcp
     container_name: connect
     ports:
       - "8083:8083"
@@ -10,6 +10,7 @@ services:
       BOOTSTRAP_SERVERS: bootstrap.transapp-rollback-poc.us-east4.managedkafka.pr-transapp-dev-use4-01.cloud.goog:9092
       GROUP_ID: 1
       CONFIG_STORAGE_TOPIC: connect_configs
+
       OFFSET_STORAGE_TOPIC: connect_offsets
       STATUS_STORAGE_TOPIC: connect_statuses
 
