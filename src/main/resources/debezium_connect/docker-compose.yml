@@ -12,17 +12,17 @@ services:
       CONFIG_STORAGE_TOPIC: connect_configs
       OFFSET_STORAGE_TOPIC: connect_offsets
       STATUS_STORAGE_TOPIC: connect_statuses
-      CONNECT_KEY_CONVERTER: io.confluent.connect.avro.AvroConverter
-      CONNECT_VALUE_CONVERTER: io.confluent.connect.avro.AvroConverter
-      CONNECT_KEY_CONVERTER_SCHEMA_REGISTRY_URL: http://schema-registry:8081
-      CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: http://schema-registry:8081
+
+      CONNECT_KEY_CONVERTER: org.apache.kafka.connect.json.JsonConverter
+      CONNECT_VALUE_CONVERTER: org.apache.kafka.connect.json.JsonConverter
+
+
       CONNECT_REST_ADVERTISED_HOST_NAME: connect
-      # Security
+
+      # Security for Kafka connection
       CONNECT_SECURITY_PROTOCOL: SASL_SSL
       CONNECT_SASL_MECHANISM: OAUTHBEARER
+      CONNECT_SASL_JAAS_CONFIG: org.apache.kafka.common.security.oauthbearer.OAuthBearerLoginModule required;
+      CONNECT_SASL_LOGIN_CALLBACK_HANDLER_CLASS: com.google.cloud.hosted.kafka.auth.GcpLoginCallbackHandler
 
-      CONNECT_SASL_JAAS_CONFIG: |
-        org.apache.kafka.common.security.oauthbearer.OAuthBearerLoginModule required
-        oauth.client.id="sa-poc-kafka-user@pr-transapp-dev-use4-01.iam.gserviceaccount.com"
-        oauth.client.secret="/tmp/sa-key.json";
-      CONNECT_SSL_ENDPOINT_IDENTIFICATION_ALGORITHM: https
+
