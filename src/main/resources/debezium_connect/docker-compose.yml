@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   connect:
-    image: custom_deb_image_2
+    image: custom_deb_image_3
     container_name: connect
     ports:
       - "8083:8083"
