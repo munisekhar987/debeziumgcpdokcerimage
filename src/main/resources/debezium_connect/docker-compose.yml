@@ -5,7 +5,7 @@ services:
     ports:
       - "8083:8083"
     environment:
-      BOOTSTRAP_SERVERS: bootstrap.transapp-rollback-poc.us-east4.managedkafka.pr-transapp-dev-use4-01.cloud.goog:9092
+      BOOTSTRAP_SERVERS: bootstrap.transapp-rollback-poc.us-east4.managedkafka.pr-transapp-dev-use4-01.cloud.goog:9093
       GROUP_ID: 1
       CONFIG_STORAGE_TOPIC: connect_configs
       OFFSET_STORAGE_TOPIC: connect_offsets
