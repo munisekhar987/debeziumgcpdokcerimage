@@ -1,6 +1,6 @@
 services:
   connect:
-    image: debezium-connect-gcp
+    image: quay.io/debezium/connect:latest
     container_name: connect
     ports:
       - "8083:8083"
