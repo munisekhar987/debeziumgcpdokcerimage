@@ -36,4 +36,4 @@ services:
       CONNECT_LOG_LEVEL: INFO
 
     volumes:
-      - sa-key.json:/secrets/gcp-key.json:ro
+      - ./sa-key.json:/secrets/gcp-key.json:ro
