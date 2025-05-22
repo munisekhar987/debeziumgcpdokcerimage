@@ -7,33 +7,35 @@ services:
     ports:
       - "8083:8083"
     environment:
-      # Kafka Bootstrap
       BOOTSTRAP_SERVERS: bootstrap.transapp-rollback-poc.us-east4.managedkafka.pr-transapp-dev-use4-01.cloud.goog:9092
       GROUP_ID: 1
       CONFIG_STORAGE_TOPIC: connect_configs
       OFFSET_STORAGE_TOPIC: connect_offsets
       STATUS_STORAGE_TOPIC: connect_statuses
 
-      # JSON Converters
+      # Converters
       CONNECT_KEY_CONVERTER: org.apache.kafka.connect.json.JsonConverter
       CONNECT_VALUE_CONVERTER: org.apache.kafka.connect.json.JsonConverter
 
-      # REST config
       CONNECT_REST_ADVERTISED_HOST_NAME: connect
 
-
+      # Security - IAM Auth
       CONNECT_SECURITY_PROTOCOL: SASL_SSL
-      CONNECT_SASL_MECHANISM: PLAIN
+      CONNECT_SASL_MECHANISM: OAUTHBEARER
+      CONNECT_SASL_JAAS_CONFIG: org.apache.kafka.common.security.oauthbearer.OAuthBearerLoginModule required;
+      CONNECT_SASL_LOGIN_CALLBACK_HANDLER_CLASS: com.google.cloud.hosted.kafka.auth.GcpLoginCallbackHandler
 
-      # Read credentials from mounted file
-      CONNECT_SASL_JAAS_CONFIG: >
-        org.apache.kafka.common.security.plain.PlainLoginModule required
-        username="sa-poc-kafka-user@pr-transapp-dev-use4-01.iam.gserviceaccount.com"
-        password="$(cat /secrets/gcp-key.json | base64 | tr -d '\n')";
+      # Also configure producer and consumer separately
+      CONNECT_PRODUCER_SECURITY_PROTOCOL: SASL_SSL
+      CONNECT_PRODUCER_SASL_MECHANISM: OAUTHBEARER
+      CONNECT_PRODUCER_SASL_JAAS_CONFIG: org.apache.kafka.common.security.oauthbearer.OAuthBearerLoginModule required;
 
+      CONNECT_CONSUMER_SECURITY_PROTOCOL: SASL_SSL
+      CONNECT_CONSUMER_SASL_MECHANISM: OAUTHBEARER
+      CONNECT_CONSUMER_SASL_JAAS_CONFIG: org.apache.kafka.common.security.oauthbearer.OAuthBearerLoginModule required;
 
-      # Logging
-      CONNECT_LOG_LEVEL: INFO
+      # Service Account file
+      GOOGLE_APPLICATION_CREDENTIALS: /secrets/gcp-key.json
 
     volumes:
       - ./sa-key.json:/secrets/gcp-key.json:ro
